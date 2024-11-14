@@ -4,22 +4,22 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   // Get the session token from cookies
 
-  // const authCookieName = process.env.AD_AUTH_COOKIE_NAME || "";
-  // const cookie = request.cookies.get(authCookieName);
+  const authCookieName = process.env.AD_AUTH_COOKIE_NAME || "";
+  const cookie = request.cookies.get(authCookieName);
 
   // Extract the pathname from the request URL
   const pathname = new URL(request.url).pathname;
 
-  // if (!cookie && pathname !== "/flights") {
-  //   return NextResponse.redirect(new URL("/flights", request.url));
-  // }
+  if (!cookie && pathname !== "/flights") {
+    return NextResponse.redirect(new URL("/flights", request.url));
+  }
 
   if (pathname === "/") {
     return NextResponse.redirect(new URL("/flights", request.url));
   }
 
-  // if (pathname === "/login" && cookie)
-  //   return NextResponse.redirect(new URL("/flights", request.url));
+  if (pathname === "/login" && cookie)
+    return NextResponse.redirect(new URL("/flights", request.url));
 
   return NextResponse.next();
 }
