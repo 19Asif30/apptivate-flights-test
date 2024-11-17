@@ -43,7 +43,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={GeistSans.className}>
+      <body className={`${GeistSans.className} h-screen bg-cover bg-no-repeat`}       style={{ backgroundImage: "url('https://static.vecteezy.com/system/resources/previews/009/328/817/non_2x/travel-by-air-on-an-airplane-around-the-world-passenger-plane-and-planet-earth-on-a-gradient-blue-background-travel-poster-copy-space-illustration-vector.jpg')" }}
+      >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             <ContentLayout title="Apptivate Flights">{children}</ContentLayout>

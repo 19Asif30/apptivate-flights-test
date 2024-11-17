@@ -479,7 +479,7 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
     >
       <div>
         {/* Airport Search and Select Box */}
-        <div className="mb-4">
+        <div className="mb-4 bg-primary-foreground">
           {/* <Input
             placeholder="Search Airport"
             value={searchValue}
