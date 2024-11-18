@@ -344,7 +344,7 @@
 
 // export default Gmap;
 
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
 import {
@@ -356,7 +356,13 @@ import {
 import GmapWrapper from "@/components/map/MapWrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Import shadcn select components
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"; // Import shadcn select components
 import { Input } from "@/components/ui/input"; // Import shadcn input for search
 import { format, parseISO } from "date-fns";
 import { ArrowRight, Plane } from "lucide-react";
@@ -373,6 +379,54 @@ const calculateDuration = (departureDate, arrivalDate) => {
   return `${hours}h ${minutes}m`;
 };
 
+// function getFlightIconSVG(price) {
+//   const maxPrice = 250;
+//   const minPrice = 0;
+//   const normalizedPrice = Math.max(minPrice, Math.min(price, maxPrice));
+
+//   // Calculate the ratio of price (0 to 1 scale)
+//   const ratio = normalizedPrice / maxPrice;
+
+//   // Define the color transition points: light blue -> blue -> red
+//   const lightBlue = { r: 173, g: 216, b: 230 }; // Light Blue (Low price)
+//   const blue = { r: 0, g: 0, b: 255 }; // Blue (Mid price)
+//   const red = { r: 255, g: 0, b: 0 }; // Red (High price)
+
+//   let color;
+
+//   if (ratio < 0.5) {
+//     // Transition from light blue to blue for the first half of the range
+//     const transitionRatio = ratio * 2; // Scale to 0-1
+//     const r = Math.floor(
+//       lightBlue.r + (blue.r - lightBlue.r) * transitionRatio
+//     );
+//     const g = Math.floor(
+//       lightBlue.g + (blue.g - lightBlue.g) * transitionRatio
+//     );
+//     const b = Math.floor(
+//       lightBlue.b + (blue.b - lightBlue.b) * transitionRatio
+//     );
+//     color = `rgb(${r}, ${g}, ${b})`;
+//   } else {
+//     // Transition from blue to red for the second half of the range
+//     const transitionRatio = (ratio - 0.5) * 2; // Scale to 0-1
+//     const r = Math.floor(blue.r + (red.r - blue.r) * transitionRatio);
+//     const g = Math.floor(blue.g + (red.g - blue.g) * transitionRatio);
+//     const b = Math.floor(blue.b + (red.b - blue.b) * transitionRatio);
+//     color = `rgb(${r}, ${g}, ${b})`;
+//   }
+
+//   // Return the SVG string with the appropriate fill color
+//   return `
+//      data:image/svg+xml;charset=UTF-8,
+
+//     <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' focusable='false'>
+//       <path fill='${color}' d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/>
+//     </svg>
+//   `;
+// }
+import { useRouter } from "next/navigation"; // If using Next.js for routing
+
 function getFlightIconSVG(price) {
   const maxPrice = 250;
   const minPrice = 0;
@@ -381,44 +435,40 @@ function getFlightIconSVG(price) {
   // Calculate the ratio of price (0 to 1 scale)
   const ratio = normalizedPrice / maxPrice;
 
-  // Define the color transition points: light blue -> blue -> red
-  const lightBlue = { r: 173, g: 216, b: 230 }; // Light Blue (Low price)
-  const blue = { r: 0, g: 0, b: 255 };         // Blue (Mid price)
-  const red = { r: 255, g: 0, b: 0 };          // Red (High price)
+  // Define the color transition points: blue -> purple -> red
+  const blue = { r: 33, g: 150, b: 243 }; // Blue (Low price)
+  const purple = { r: 156, g: 39, b: 176 }; // Purple (Mid price)
+  const red = { r: 244, g: 67, b: 54 }; // Red (High price)
 
   let color;
 
   if (ratio < 0.5) {
-    // Transition from light blue to blue for the first half of the range
+    // Transition from blue to purple for the first half of the range
     const transitionRatio = ratio * 2; // Scale to 0-1
-    const r = Math.floor(lightBlue.r + (blue.r - lightBlue.r) * transitionRatio);
-    const g = Math.floor(lightBlue.g + (blue.g - lightBlue.g) * transitionRatio);
-    const b = Math.floor(lightBlue.b + (blue.b - lightBlue.b) * transitionRatio);
+    const r = Math.floor(blue.r + (purple.r - blue.r) * transitionRatio);
+    const g = Math.floor(blue.g + (purple.g - blue.g) * transitionRatio);
+    const b = Math.floor(blue.b + (purple.b - blue.b) * transitionRatio);
     color = `rgb(${r}, ${g}, ${b})`;
   } else {
-    // Transition from blue to red for the second half of the range
+    // Transition from purple to red for the second half of the range
     const transitionRatio = (ratio - 0.5) * 2; // Scale to 0-1
-    const r = Math.floor(blue.r + (red.r - blue.r) * transitionRatio);
-    const g = Math.floor(blue.g + (red.g - blue.g) * transitionRatio);
-    const b = Math.floor(blue.b + (red.b - blue.b) * transitionRatio);
+    const r = Math.floor(purple.r + (red.r - purple.r) * transitionRatio);
+    const g = Math.floor(purple.g + (red.g - purple.g) * transitionRatio);
+    const b = Math.floor(purple.b + (red.b - purple.b) * transitionRatio);
     color = `rgb(${r}, ${g}, ${b})`;
   }
 
   // Return the SVG string with the appropriate fill color
   return `
-     data:image/svg+xml;charset=UTF-8,
-
+    data:image/svg+xml;charset=UTF-8,
     <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' focusable='false'>
       <path fill='${color}' d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/>
     </svg>
   `;
 }
 
-
-
-
-
 const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
+  console.log(data);
 
   const [infoData, setInfoData] = useState(null);
   const [zoomData, setZoomData] = useState({
@@ -469,6 +519,41 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
     airport.name.toLowerCase().includes(searchValue.toLowerCase())
   );
 
+  const [flt, setFlt] = useState<any>(null); // Assuming this is the flight data
+
+  const { replace } = useRouter(); // For redirecting in Next.js
+
+  const handleSelectClick = () => {
+    // Retrieve the necessary values from localStorage
+    const fromValue = localStorage.getItem("fromValue"); // Origin airport code
+    const toValue = "ANY"; // Destination airport code
+    const storedDate = localStorage.getItem("date");
+    const storedPassengersCount = localStorage.getItem("passengersCount");
+
+    const parsedDate = storedDate ? JSON.parse(storedDate) : {};
+    const parsedPassengersCount = storedPassengersCount
+      ? JSON.parse(storedPassengersCount)
+      : {};
+
+    // Format dates for Ryanair (using departure and return dates from localStorage)
+    const dateOut = parsedDate?.from
+      ? format(new Date(parsedDate.from), "yyyy-MM-dd")
+      : "";
+    const dateIn = parsedDate?.to
+      ? format(new Date(parsedDate.to), "yyyy-MM-dd")
+      : "";
+
+    // Defaulting to values from localStorage or fallback if not present
+    const adults = parsedPassengersCount?.adults || 1;
+    const children = parsedPassengersCount?.children || 0;
+
+    // Construct the Ryanair URL
+    const ryanairUrl = `https://www.ryanair.com/gb/en/fare-finder?originIata=${fromValue}&dateOut=${dateOut}&dateIn=${dateIn}&isExactDate=true&outboundFromHour=00:00&outboundToHour=23:59&inboundFromHour=00:00&inboundToHour=23:59&priceValueTo=&currency=GBP&destinationIata=${toValue}&isReturn=true&isMacDestination=false&promoCode=&adults=${adults}&teens=0&children=${children}&infants=0&isFlexibleDay=false`;
+
+    // Redirect to the Ryanair fare finder
+    window.location.href = ryanairUrl;
+  };
+
   return (
     <div
       className={
@@ -485,7 +570,10 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           /> */}
-          <Select onValueChange={handleAirportSelect} value={hoveredMarker?.outbound.arrivalAirport.iataCode}>
+          <Select
+            onValueChange={handleAirportSelect}
+            value={hoveredMarker?.outbound.arrivalAirport.iataCode}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select Airport" />
             </SelectTrigger>
@@ -500,13 +588,13 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
         </div>
 
         {placeData && (
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 bg-card rounded-sm">
             {/* Existing code for displaying flight cards */}
             <div className="flex flex-col space-y-2 col-span-2">
-              <div className="ml-auto">
+              {/* <div className="ml-auto">
                 <SortFilter type="Sort by:" />
-              </div>
-              <h4 className="text-slate-800 text-xl">
+              </div> */}
+              <h4 className="text-slate-800 text-xl p-2">
                 Flights from{" "}
                 <span className="font-bold">
                   {placeData[0]?.outbound?.departureAirport?.name}
@@ -530,7 +618,7 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
 
                 return (
                   <Card key={index}>
-                    {/* Outbound Journey */}
+                    {/* Outbound Journey (Departure) */}
                     <CardHeader className="p-0 pt-1 px-5 m-0">
                       <p className="text-sm text-gray-500">
                         {format(
@@ -538,6 +626,10 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
                           "EEEE, MMMM d, yyyy"
                         )}
                       </p>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        Departure (Outbound)
+                      </h3>{" "}
+                      {/* Added header for clarity */}
                     </CardHeader>
                     <CardContent className="flex items-center justify-between gap-1">
                       <div>{outbound.flightNumber}</div>
@@ -571,14 +663,16 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
                           {outbound.price.valueMainUnit}.
                           {outbound.price.valueFractionalUnit}
                         </p>
-                        <Button variant="default">Select</Button>
+                        <Button variant={"default"} onClick={handleSelectClick}>
+                          Select
+                        </Button>{" "}
                       </div>
                     </CardContent>
 
                     {/* Separator */}
                     <hr className="my-4 w-6/12 mx-auto" />
 
-                    {/* Inbound Journey */}
+                    {/* Inbound Journey (Return) */}
                     <CardHeader className="p-0 px-5 m-0">
                       <p className="text-sm text-gray-500">
                         {format(
@@ -586,6 +680,10 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
                           "EEEE, MMMM d, yyyy"
                         )}
                       </p>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        Return (Inbound)
+                      </h3>{" "}
+                      {/* Added header for clarity */}
                     </CardHeader>
                     <CardContent className="flex items-center justify-between gap-1">
                       <div>{inbound.flightNumber}</div>
@@ -619,7 +717,9 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
                           {inbound.price.valueMainUnit}.
                           {inbound.price.valueFractionalUnit}
                         </p>
-                        <Button variant="default">Select</Button>
+                        <Button variant={"default"} onClick={handleSelectClick}>
+                          Select
+                        </Button>{" "}
                       </div>
                     </CardContent>
                   </Card>
@@ -630,77 +730,96 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
         )}
       </div>
 
-      {(loading && googleMapsApiKey) ? (
-        <GmapWrapper loading={true} googleMapsApiKey={googleMapsApiKey}></GmapWrapper>
-      ) : googleMapsApiKey && (
-        <GmapWrapper zoomData={zoomData} loading={loading} googleMapsApiKey={googleMapsApiKey}>
-          <>
-            {data?.map((marker, index) => (
-              <Marker
-                key={`last-location-${index}`}
-                position={marker?.position}
-                onMouseOver={() => {setHoveredMarker(marker); handleMarkerClick(marker)}}
-                onClick={() => {setHoveredMarker(marker); handleMarkerClick(marker)}}
-                icon={{
-                  url: getFlightIconSVG(marker?.outbound?.price?.value)
-                }}
-              />
-            ))}
+      {loading && googleMapsApiKey ? (
+        <GmapWrapper
+          loading={true}
+          googleMapsApiKey={googleMapsApiKey}
+        ></GmapWrapper>
+      ) : (
+        googleMapsApiKey && (
+          <GmapWrapper
+            zoomData={zoomData}
+            loading={loading}
+            googleMapsApiKey={googleMapsApiKey}
+          >
+            <>
+              {data?.map((marker, index) => (
+                <Marker
+                  key={`last-location-${index}`}
+                  position={marker?.position}
+                  onMouseOver={() => {
+                    setHoveredMarker(marker);
+                    handleMarkerClick(marker);
+                  }}
+                  onClick={() => {
+                    setHoveredMarker(marker);
+                    handleMarkerClick(marker);
+                  }}
+                  icon={{
+                    url: getFlightIconSVG(marker?.outbound?.price?.value)
+                  }}
+                />
+              ))}
 
-            {hoveredMarker && (
-              <InfoWindow
-                position={hoveredMarker?.position}
-                onCloseClick={() => {setInfoData(null); setHoveredMarker(null);}}
+              {hoveredMarker && (
+                <InfoWindow
+                  position={hoveredMarker?.position}
+                  onCloseClick={() => {
+                    setInfoData(null);
+                    setHoveredMarker(null);
+                  }}
+                  options={{
+                    pixelOffset: new window.google.maps.Size(0, -10)
+                  }}
+                >
+                  <div className="p-1">
+                    <p className="font-extrabold text-black">
+                      {hoveredMarker.outbound.arrivalAirport.name}
+                      &nbsp;
+                      <Plane className="inline" size={18} color="blue" />
+                    </p>
+                    <p className="font-semibold italic text-cyan-500">
+                      {hoveredMarker.outbound.price.currencySymbol}&nbsp;
+                      {hoveredMarker.outbound.price.value}
+                    </p>
+                  </div>
+                </InfoWindow>
+              )}
+
+              <Polyline
+                path={
+                  hoveredMarker
+                    ? [hoveredMarker.position, zoomData.position]
+                    : []
+                }
                 options={{
-                  pixelOffset: new window.google.maps.Size(0, -10)
+                  strokeColor: "#FF0000",
+                  strokeOpacity: 1,
+                  strokeWeight: 2,
+                  geodesic: true,
+                  strokeDasharray: "10, 10"
                 }}
-              >
-                <div className="p-1">
-                  <p className="font-extrabold text-black">
-                    {hoveredMarker.outbound.arrivalAirport.name}
-                    &nbsp;
-                    <Plane className="inline" size={18} color='blue' />
-                  </p>
-                  <p className="font-semibold italic text-cyan-500">
-                    {hoveredMarker.outbound.price.currencySymbol}&nbsp;
-                    {hoveredMarker.outbound.price.value}
-                  </p>
-                </div>
-              </InfoWindow>
-            )}
+                visible={hoveredMarker ? true : false}
+              />
 
-            <Polyline
-              path={
-                hoveredMarker ? [hoveredMarker.position, zoomData.position] : []
-              }
-              options={{
-                strokeColor: "#FF0000",
-                strokeOpacity: 1,
-                strokeWeight: 2,
-                geodesic: true,
-                strokeDasharray: "10, 10"
-              }}
-              visible={hoveredMarker ? true : false}
-            />
-
-            <Marker position={zoomData?.position}>
-              {/* <InfoWindow position={zoomData?.position} zIndex={50}>
+              <Marker position={zoomData?.position}>
+                {/* <InfoWindow position={zoomData?.position} zIndex={50}>
                 <div className="">
                   <p className="font-extrabold text-2xl text-black">
                     {originDetails.name}
                   </p>
                 </div>
               </InfoWindow> */}
-            </Marker>
-          </>
-        </GmapWrapper>
+              </Marker>
+            </>
+          </GmapWrapper>
+        )
       )}
     </div>
   );
 };
 
 export default Gmap;
-
 
 // 'use client';
 

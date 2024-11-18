@@ -19,7 +19,6 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover";
 import { Globe } from "lucide-react";
-import { places } from "@/lib/places-list";
 
 export function PlaceSelect({
   type,
@@ -61,19 +60,17 @@ export function PlaceSelect({
         >
           <>
             {loading ? (
-              <p className="text-secondary-foreground">
-                loading...
-              </p>
+              <p className="text-secondary-foreground">loading...</p>
             ) : (
               <>
                 {" "}
                 <p className="text-left">{type}</p>
                 <div className="flex justify-between">
                   {" "}
-                  <span className="text-slate-500">
+                  <span className="font-normal">
                     {" "}
                     {value ? (
-                      <span className="text-black">
+                      <span>
                         {
                           frameworks.find(
                             (framework) => framework.value === value

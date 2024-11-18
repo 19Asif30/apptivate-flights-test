@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { addDays, format } from "date-fns";
-import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,13 +13,20 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover";
 
-export function CalendarDateRangePicker({ className, type, date, setDate }: any) {
+export function CalendarDateRangePicker({
+  className,
+  type,
+  date,
+  setDate
+}: any) {
+  // Get today's date to set the minDate for the calendar
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize the time to midnight
 
   return (
     <div className={cn("grid gap-2 h-full", className)}>
       <Popover>
         <PopoverTrigger asChild>
-          {/* <p>Depart</p> */}
           <Button
             id="date"
             variant={"outline"}
@@ -52,6 +58,7 @@ export function CalendarDateRangePicker({ className, type, date, setDate }: any)
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
+            fromDate={today} // Disables all dates before today
           />
         </PopoverContent>
       </Popover>

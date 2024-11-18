@@ -1,8 +1,8 @@
 import { atom, useAtom } from "jotai";
 
 const configAtom = atom({
-  destinations: null,
-  active_airports: null
+  destinations: [],
+  active_airports: []
 });
 
 export function useFlights() {

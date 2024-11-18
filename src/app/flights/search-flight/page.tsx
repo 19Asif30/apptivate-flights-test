@@ -8,7 +8,6 @@ export default async function Page({
   params: { slug: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  console.log(searchParams);
   let flightsData, originDetails;
   try {
     flightsData = await getFlights(searchParams);
@@ -18,13 +17,14 @@ export default async function Page({
     originDetails = null;
   }
 
-
-  console.log(flightsData)
-
   return (
     <>
-      {(flightsData && originDetails) ? (
-        <FlightCard flightsData={flightsData} toPlace={searchParams?.toPlace} originDetails={originDetails} />
+      {flightsData && originDetails ? (
+        <FlightCard
+          flightsData={flightsData}
+          toPlace={searchParams?.toPlace}
+          originDetails={originDetails}
+        />
       ) : (
         <div className="text-center">No flights Found</div>
       )}
