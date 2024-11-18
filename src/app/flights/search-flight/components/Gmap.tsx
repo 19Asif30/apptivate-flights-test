@@ -779,8 +779,8 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
                       <Plane className="inline" size={18} color="blue" />
                     </p>
                     <p className="font-semibold italic text-cyan-500">
-                      {hoveredMarker.outbound.price.currencySymbol}&nbsp;
-                      {hoveredMarker.outbound.price.value}
+                      {hoveredMarker.summary.price.currencySymbol}&nbsp;
+                      {hoveredMarker.summary.price.value}
                     </p>
                   </div>
                 </InfoWindow>
