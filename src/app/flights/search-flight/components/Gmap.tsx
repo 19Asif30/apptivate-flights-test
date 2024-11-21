@@ -523,7 +523,7 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
 
   const { replace } = useRouter(); // For redirecting in Next.js
 
-  const handleSelectClick = () => {
+  const handleSelectClick = (toplace) => {
     // Retrieve the necessary values from localStorage
     const fromValue = localStorage.getItem("fromValue"); // Origin airport code
     const toValue = "ANY"; // Destination airport code
@@ -548,7 +548,7 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
     const children = parsedPassengersCount?.children || 0;
 
     // Construct the Ryanair URL
-    const ryanairUrl = `https://www.ryanair.com/gb/en/fare-finder?originIata=${fromValue}&dateOut=${dateOut}&dateIn=${dateIn}&isExactDate=true&outboundFromHour=00:00&outboundToHour=23:59&inboundFromHour=00:00&inboundToHour=23:59&priceValueTo=&currency=GBP&destinationIata=${toValue}&isReturn=true&isMacDestination=false&promoCode=&adults=${adults}&teens=0&children=${children}&infants=0&isFlexibleDay=false`;
+    const ryanairUrl = `https://www.ryanair.com/gb/en/fare-finder?originIata=${fromValue}&dateOut=${dateOut}&dateIn=${dateIn}&isExactDate=true&outboundFromHour=00:00&outboundToHour=23:59&inboundFromHour=00:00&inboundToHour=23:59&priceValueTo=&currency=GBP&destinationIata=${toplace}&isReturn=true&isMacDestination=false&promoCode=&adults=${adults}&teens=0&children=${children}&infants=0&isFlexibleDay=false`;
 
     // Redirect to the Ryanair fare finder
     window.location.href = ryanairUrl;
@@ -663,7 +663,12 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
                           {outbound.price.valueMainUnit}.
                           {outbound.price.valueFractionalUnit}
                         </p>
-                        <Button variant={"default"} onClick={handleSelectClick}>
+                        <Button
+                          variant={"default"}
+                          onClick={() =>
+                            handleSelectClick(outbound.arrivalAirport.iataCode)
+                          }
+                        >
                           Select
                         </Button>{" "}
                       </div>
@@ -717,7 +722,12 @@ const Gmap = ({ data, loading, originDetails, googleMapsApiKey }) => {
                           {inbound.price.valueMainUnit}.
                           {inbound.price.valueFractionalUnit}
                         </p>
-                        <Button variant={"default"} onClick={handleSelectClick}>
+                        <Button
+                          variant={"default"}
+                          onClick={() =>
+                            handleSelectClick(inbound.departureAirport.iataCode)
+                          }
+                        >
                           Select
                         </Button>{" "}
                       </div>

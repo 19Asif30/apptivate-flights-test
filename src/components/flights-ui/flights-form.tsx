@@ -43,8 +43,8 @@ export default function FlightsForm() {
   const [toValue, setToValue] = useState("Everywhere");
   const [flightClass, setFlightClass] = useState("Economy");
   const [passengersCount, setPassengersCount] = useState({
-    adults: 2,
-    children: 2
+    adults: 1,
+    children: 0
   });
 
   const { replace } = useRouter();
