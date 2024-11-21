@@ -100,6 +100,28 @@ export default function FlightsForm() {
   }, [fromValue, setState]);
 
   // Handle form navigation when "Search" button is clicked
+  // const handleNavigation = useCallback(() => {
+  //   if (!fromValue || !toValue || !date?.from || !date?.to) {
+  //     alert("Please select all the details");
+  //     return;
+  //   }
+
+  //   const url = new URL(`${window.location.href}/search-flight/`);
+  //   const fromDate = format(date?.from, "yyyy-MM-dd");
+  //   const toDate = format(date?.to, "yyyy-MM-dd");
+
+  //   url.searchParams.set("fromDate", fromDate);
+  //   url.searchParams.set("toDate", toDate);
+  //   url.searchParams.set("fromPlace", fromValue);
+  //   url.searchParams.set("toPlace", toValue);
+  //   url.searchParams.set("fClass", flightClass);
+  //   url.searchParams.set("adults", passengersCount.adults.toString());
+  //   url.searchParams.set("children", passengersCount.children.toString());
+
+  //   replace(url.toString());
+  // }, [replace, fromValue, date, toValue, flightClass, passengersCount]);
+  const router = useRouter();
+
   const handleNavigation = useCallback(() => {
     if (!fromValue || !toValue || !date?.from || !date?.to) {
       alert("Please select all the details");
@@ -118,8 +140,9 @@ export default function FlightsForm() {
     url.searchParams.set("adults", passengersCount.adults.toString());
     url.searchParams.set("children", passengersCount.children.toString());
 
-    replace(url.toString());
-  }, [replace, fromValue, date, toValue, flightClass, passengersCount]);
+    // Use `push` to add the URL to history
+    router.push(url.toString());
+  }, [router, fromValue, date, toValue, flightClass, passengersCount]);
 
   return (
     <div className="flex-col flex">
